@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_system_webmcp",
+  "version": "0.1.0",
+  "description": "Registers the site's WebMCP tools with the browser.",
+  "license": "GPL-3.0-or-later",
+  "assets": [
+    {
+      "name": "plg_system_webmcp.webmcp",
+      "type": "script",
+      "uri": "plg_system_webmcp/webmcp.js",
+      "dependencies": ["core"],
+      "attributes": {
+        "type": "module"
+      },
+      "version": "0.1.0"
+    }
+  ]
+}

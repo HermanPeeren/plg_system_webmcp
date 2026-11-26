@@ -1,0 +1,20 @@
+/vendor/
+/node_modules/
+/build/*.zip
+/build/tmp/
+
+# The development site: Joomla 6 with J2Commerce, git-ignored.
+/joomla/
+
+# Third-party sources used to set up the development site (J2Commerce).
+/.deps/
+
+# Scratch
+/xdiv/
+
+/cypress.env.json
+/tests/cypress/screenshots/
+/tests/cypress/videos/
+/tests/cypress/downloads/
+/.phpunit.cache/
+/.php-cs-fixer.cache

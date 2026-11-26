@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="system" method="upgrade">
+	<name>plg_system_webmcp</name>
+	<author>Herman Peeren</author>
+	<creationDate>2026-11</creationDate>
+	<copyright>Copyright (C) 2026 Yepr, Herman Peeren. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorUrl>https://yepr.nl</authorUrl>
+	<version>0.1.0</version>
+	<description>PLG_SYSTEM_WEBMCP_XML_DESCRIPTION</description>
+	<namespace path="src">Yepr\Plugin\System\WebMcp</namespace>
+	<scriptfile>script.php</scriptfile>
+
+	<files folder="plugins/system/webmcp">
+		<folder plugin="webmcp">services</folder>
+		<folder>language</folder>
+		<folder>src</folder>
+	</files>
+
+	<media folder="media/plg_system_webmcp" destination="plg_system_webmcp">
+		<folder>js</folder>
+		<filename>joomla.asset.json</filename>
+	</media>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="article_tools"
+					type="radio"
+					label="PLG_SYSTEM_WEBMCP_FIELD_ARTICLE_TOOLS_LABEL"
+					description="PLG_SYSTEM_WEBMCP_FIELD_ARTICLE_TOOLS_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="shop_tools"
+					type="radio"
+					label="PLG_SYSTEM_WEBMCP_FIELD_SHOP_TOOLS_LABEL"
+					description="PLG_SYSTEM_WEBMCP_FIELD_SHOP_TOOLS_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="max_results"
+					type="number"
+					label="PLG_SYSTEM_WEBMCP_FIELD_MAX_RESULTS_LABEL"
+					description="PLG_SYSTEM_WEBMCP_FIELD_MAX_RESULTS_DESC"
+					default="10"
+					min="1"
+					max="50"
+					filter="integer"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

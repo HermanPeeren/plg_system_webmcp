@@ -1,0 +1,45 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    # Level 8: array shapes and null handling. Tool input comes from an AI agent,
+    # so every value is checked before it is used.
+    level: 8
+
+    paths:
+        - src/plugins/system/webmcp/src
+        - src/plugins/system/webmcp/services
+        - src/script.php
+        - tests
+        - build
+        - tools
+
+    # Joomla is reference material: CMSPlugin, the document, the router, the
+    # database. /joomla is git-ignored; see docs/development.md. CI fetches its own.
+    scanDirectories:
+        - joomla/libraries
+        - joomla/components/com_content
+        - joomla/administrator/components/com_content
+        # J2Commerce, for the shop adapter. Its source is cloned into the git-ignored
+        # /.deps by tools/fetch-j2commerce.sh, locally and on CI.
+        - .deps/j2commerce/administrator/components/com_j2commerce/src
+        - .deps/j2commerce/components/com_j2commerce/src
+
+    bootstrapFiles:
+        - tools/phpstan-bootstrap.php
+
+    excludePaths:
+        analyse:
+            - tests/cypress/*
+
+    ignoreErrors:
+        # DatabaseInterface::quoteName() is documented as `array|string`
+        # because it takes either and returns the same kind. Given one string it
+        # returns one string; the repositories and the install script pass only strings.
+        -
+            message: '#(Parameter \#\d \$\w+ of method Joomla\\Database\\QueryInterface::(from|delete|update|insert|select|where|set|whereIn|whereNotIn|join|order|leftJoin|innerJoin)\(\) expects .+, array\|string given|Binary operation "\." between .*array\|string.* results in an error)#'
+            paths:
+                - src/plugins/system/webmcp/src
+                - src/script.php
+
+    treatPhpDocTypesAsCertain: false
