@@ -40,7 +40,15 @@ export function installModelContext(win) {
           throw new win.DOMException(`No tool ${tool.name ?? tool}`, 'NotFoundError');
         }
 
-        return JSON.stringify(await registered.execute(input, { signal: new win.AbortController().signal }));
+        // As in Chrome: an exception from execute() reaches the agent without its message.
+        let result;
+        try {
+          result = await registered.execute(input, { signal: new win.AbortController().signal });
+        } catch {
+          throw new win.DOMException('Tool execution failed.', 'OperationError');
+        }
+
+        return JSON.stringify(result);
       },
     },
   });

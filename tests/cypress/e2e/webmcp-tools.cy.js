@@ -73,7 +73,8 @@ describe('WebMCP tools', () => {
 
   it('answers an unknown property with the values there are', () => {
     cy.window()
-      .then((win) => callTool(win, 'search_products', { properties: ['Purple'] }).catch((error) => error.message))
+      .then((win) => callTool(win, 'search_products', { properties: ['Purple'] }))
+      .its('error')
       .should('contain', 'There is no property value "Purple"');
   });
 
@@ -98,7 +99,7 @@ describe('WebMCP tools', () => {
         const product = result.products[0];
         expect(product.needs_options).to.equal(true);
 
-        return cy.window().then((win) => callTool(win, 'add_to_cart', { product_id: product.id }).catch((e) => ({ error: e.message, id: product.id })));
+        return cy.window().then((win) => callTool(win, 'add_to_cart', { product_id: product.id }).then((r) => ({ error: r.error, id: product.id })));
       })
       .then(({ error, id }) => {
         expect(error).to.contain('is required');
@@ -118,7 +119,8 @@ describe('WebMCP tools', () => {
 
   it('takes the visitor to the checkout, where they place the order themselves', () => {
     cy.window()
-      .then((win) => callTool(win, 'go_to_checkout').catch((e) => e.message))
+      .then((win) => callTool(win, 'go_to_checkout'))
+      .its('error')
       .should('contain', 'The cart is empty');
 
     cy.window()

@@ -58,7 +58,9 @@ What made run A long:
   shop without such filters, need more steps.
 - **One task, one run each.** This shows the order of magnitude, not a benchmark. The
   WebMCP run used a stand-in for the browser API; with a real browser agent, the
-  browser and the agent add their own overhead per call.
+  browser and the agent add their own overhead per call. In Chrome's own WebMCP (Chrome 158,
+  behind a flag, tested afterwards) the same calls took about 100 ms each from
+  `executeTool()` to result, much like the stand-in.
 - **WebMCP gives reliability as well as speed.** The tool answers "out of stock", "Color is
   required" or "there is no property value Purple" as text. A clicking agent has to
   notice such a message on the page.

@@ -36,6 +36,7 @@ const registration = new AbortController();
  * @param {AbortSignal} [signal]  Aborted when the agent cancels the call.
  *
  * @returns {Promise<object>} The tool's result.
+ * @throws {Error} With the site's message when the tool fails.
  */
 async function callTool(name, input, signal) {
   const body = new FormData();
@@ -81,11 +82,30 @@ async function callTool(name, input, signal) {
   return answer.result;
 }
 
+/**
+ * Run a tool for the agent. A failure is returned as the result, `{ error: message }`,
+ * not thrown: the browser does not pass an exception's message on to the agent
+ * (Chrome reports only "Tool execution failed."), and the message is what tells the
+ * agent what to do instead ("Color is required", "there is no property value Purple").
+ * A cancelled call is still thrown, as the browser expects.
+ */
+async function executeForAgent(name, input, signal) {
+  try {
+    return await callTool(name, input, signal);
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw error;
+    }
+
+    return { error: error?.message || 'The tool failed.' };
+  }
+}
+
 async function registerTools() {
   for (const definition of options.tools) {
     const tool = {
       ...definition,
-      execute: (input, executeOptions) => callTool(definition.name, input, executeOptions?.signal),
+      execute: (input, executeOptions) => executeForAgent(definition.name, input, executeOptions?.signal),
     };
 
     try {

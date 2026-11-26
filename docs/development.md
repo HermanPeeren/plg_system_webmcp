@@ -56,8 +56,10 @@ The namespace is `Yepr\Plugin\System\WebMcp`.
    `index.php?option=com_ajax&plugin=webmcp&group=system&format=json`.
 3. `WebMcp::callTool()` checks the token, finds the tool, validates the input against its
    schema and runs it. The answer is `{ok: true, result}` or `{ok: false, error}`.
-4. The script returns the result to the agent, or throws the error message. A result
-   with `navigate_to` (same origin only) takes the visitor there afterwards.
+4. The script returns the result to the agent. A failure is returned as a result too,
+   `{ "error": "..." }`, not thrown: Chrome passes an exception from `execute()` on to the
+   agent only as "Tool execution failed.", without its message. A result with
+   `navigate_to` (same origin only) takes the visitor there afterwards.
 
 ## Adding a tool from another extension
 
@@ -130,6 +132,21 @@ A browser with WebMCP: Chrome with `chrome://flags/#enable-webmcp-testing` enabl
 origin trial), and an agent or the Model Context Tool Inspector extension to call the
 tools. Without one, the page still offers `window.JoomlaWebMcp.callTool(name, input)` for
 trying a tool from the console.
+
+## Tested with Chrome's own WebMCP
+
+Chrome 158 with `chrome://flags/#enable-webmcp-testing` (26 November 2026): the API is
+`document.modelContext` (`registerTool`, `getTools`, `executeTool`, and the events
+`toolchange`, `toolactivated`, `toolcancel`). All tools register; `getTools()` gives
+`Tool` objects with name, title, description, inputSchema, annotations and origin, and
+`executeTool()` resolves to the result as a JSON string, in about 100 ms here.
+
+- Chrome does **not** check the input against the schema: wrong input reaches the server,
+  whose `InputValidator` refuses it. Keep that check on the server.
+- An exception from `execute()` reaches the agent as `OperationError: Tool execution
+  failed.`, without its message, so the script returns failures as `{ error }` results.
+  The Cypress stand-in does the same, so the specs catch a thrown failure.
+- Chrome adds an annotation `debugging: false` of its own.
 
 ## Known limits
 

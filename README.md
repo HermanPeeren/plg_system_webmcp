@@ -5,7 +5,8 @@ A Joomla 6 system plugin that offers the site to AI agents in the browser, as
 clicking buttons, an agent calls functions the site itself provides.
 
 **Status: prototype.** WebMCP is a draft standard of the W3C Web Machine Learning Community
-Group, in an origin trial in Chrome. This plugin follows the draft of November 2026.
+Group, in an origin trial in Chrome. This plugin follows the draft of November 2026 and
+works with Chrome 158's own WebMCP (behind `chrome://flags/#enable-webmcp-testing`).
 
 ## What an agent can do
 
